@@ -1,0 +1,35 @@
+import semillas.*
+
+describe "semillas" {
+	
+	const menta1metro = new Menta(altura = 1, anio=2007)
+	const menta03metro = new Menta(altura = 0.3, anio=2007)
+	 
+	const soja = new Soja(altura=0.6, anio=2009)
+	
+	const quinoa2010 = new Quinoa(tolerancia=12, anio=2010, altura=5)
+	const quinoa2001 = new Quinoa(tolerancia=9, anio=2001, altura=5)
+
+	test "test menta" {
+		
+		assert.that(menta1metro.daSemillas())
+		assert.equals(3, menta1metro.espacio())
+
+		assert.notThat(menta03metro.daSemillas())
+		assert.equals(0.9, menta03metro.espacio())
+
+		assert.notThat(menta1metro.fuerte())
+	}
+	
+	test "soja" {
+		assert.equals(7, soja.tolerancia())
+		assert.notThat(soja.daSemillas())
+		assert.equals(0.3, soja.espacio())		
+	}
+	
+	test "quinoa" {
+		assert.that(quinoa2010.daSemillas())
+		assert.that(quinoa2001.daSemillas())
+		assert.equals(0.5, quinoa2010.espacio())		
+	}
+}
