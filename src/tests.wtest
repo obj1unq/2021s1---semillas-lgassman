@@ -1,0 +1,102 @@
+import semillas.*
+
+describe "semillas" {
+	
+	const menta1metro = new Menta(altura = 1, anio=2007)
+	const menta03metro = new Menta(altura = 0.3, anio=2007)
+	 
+	 
+	const soja = new Soja(altura=0.6, anio=2009)
+	const sojaQueDaSemillas = new Soja(altura=1.2, anio=2009)
+	
+	const quinoa2010 = new Quinoa(tolerancia=12, anio=2010, altura=5)
+	const quinoa2001 = new Quinoa(tolerancia=9, anio=2001, altura=5)
+
+	const sojaTransgenica = new SojaTransgenica(altura=1.2, anio=2009)
+	
+	const hierbabuena = new Hierbabuena(altura = 0.3, anio=2007) 
+
+	const parcela = new Parcela(ancho=20 , largo=1, horasSol=8)
+	
+	fixture {
+		4.times({iter=> parcela.plantar(new Soja(altura=1.1, anio=2010))})
+	}
+
+	test "test menta" {
+		
+		assert.that(menta1metro.daNuevaSemilla())
+		assert.equals(3, menta1metro.espacio())
+
+		assert.notThat(menta03metro.daNuevaSemilla())
+		assert.equals(0.9, menta03metro.espacio())
+
+		assert.notThat(menta1metro.fuerte())
+	}
+	
+	test "soja" {
+		assert.equals(7, soja.tolerancia())
+		assert.notThat(soja.daNuevaSemilla())
+		assert.equals(0.3, soja.espacio())		
+
+		assert.that(sojaQueDaSemillas.daNuevaSemilla())
+
+
+	}
+	
+	test "quinoa" {
+		assert.that(quinoa2010.daNuevaSemilla())
+		assert.that(quinoa2001.daNuevaSemilla())
+		assert.equals(0.5, quinoa2010.espacio())		
+	}
+	
+	test "soja transgenica" {
+		assert.equals(9, sojaTransgenica.tolerancia())
+		assert.notThat(sojaTransgenica.daNuevaSemilla())
+		assert.equals(0.6, sojaTransgenica.espacio())		
+	}
+	
+	test "test hierbabuena" {
+		
+
+		assert.notThat(hierbabuena.daNuevaSemilla())
+		assert.equals(1.8, hierbabuena.espacio())
+
+		assert.notThat(hierbabuena.fuerte())
+	}
+	
+	test "parcela" {
+		assert.notThat( parcela.complicaciones())
+		assert.equals(20, parcela.superficie())
+		assert.equals(4, parcela.cantidadMaxima())
+		
+		assert.throwsException( {parcela.plantar(new Soja(altura=1.1, anio=2010))})
+	}
+	
+	test "parcela ideal menta e hirbabuena" {
+		assert.that(menta1metro.esIdeal(parcela))
+		assert.that(hierbabuena.esIdeal(parcela))
+		const parcelita = new Parcela(ancho=1, largo=1, horasSol=1)
+		assert.notThat(menta1metro.esIdeal(parcelita))
+		assert.notThat(hierbabuena.esIdeal(parcelita))
+	}
+	
+	test "parcela ideal quinoa" {
+		assert.that(quinoa2010.esIdeal(parcela))
+		const parcelita = new Parcela(ancho=20, largo=20, horasSol=8)
+		parcelita.plantar(new Soja(altura=2, anio=2010))
+		assert.notThat(quinoa2010.esIdeal(parcelita))
+	}
+	
+	test "parcela ideal soja" {
+		assert.notThat(soja.esIdeal(parcela))
+		const parcelita = new Parcela(ancho=20, largo=20, horasSol=7)
+		assert.that(soja.esIdeal(parcelita))
+	}
+	
+	test "parcela ideal soja transgenica" {
+		assert.notThat(soja.esIdeal(parcela))
+		const parcelita = new Parcela(ancho=5, largo=10, horasSol=7)
+		assert.that(soja.esIdeal(parcelita))
+	}
+	
+}
