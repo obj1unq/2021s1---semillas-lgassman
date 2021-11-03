@@ -18,7 +18,7 @@ describe "semillas" {
 
 	const parcela = new Parcela(ancho=20 , largo=1, horasSol=8)
 	
-	fixture {
+	method initialize() {
 		4.times({iter=> parcela.plantar(new Soja(altura=1.1, anio=2010))})
 	}
 
